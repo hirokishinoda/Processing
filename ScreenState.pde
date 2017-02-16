@@ -1,4 +1,7 @@
+//画面遷移用　抽象クラス
 abstract class ScreenState {
+
+  //コンストラクタ
   ScreenState() {
   }
 
@@ -9,5 +12,4 @@ abstract class ScreenState {
 
   abstract void displayScreen();
   abstract ScreenState decideScreen();
-  abstract int isScreenNo();
 }

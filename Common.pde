@@ -1,7 +1,7 @@
 public interface Common {
-
-  public static final int WIDTH = 480;
-  public static final int HEIGHT = 480;
+  //明示的に public static 表記　（processingでは意味がないかも？）
+  public static final int WIDTH = 512;
+  public static final int HEIGHT = 512;
 
   public static final int MAPX = 71;
   public static final int MAPY = 94;
@@ -12,8 +12,4 @@ public interface Common {
   public static final int LEFT = 1;
   public static final int RIGHT = 2;
   public static final int UP = 3;
-  
-  public static final int TITLE = 0;
-  public static final int WMAP = 1;
-  public static final int MENU = 2;
 }

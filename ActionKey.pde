@@ -1,4 +1,4 @@
-class ActionKey {
+public class ActionKey {
 
   private int state;
   private int mode;
@@ -10,20 +10,24 @@ class ActionKey {
   private static final int STATE_PRESSED = 1;
   private static final int STATE_WAITING_FOR_RELEASE = 2;
 
+  //コンストラクタ（モード自動設定）
   public ActionKey() {
     this(NORMAL);
   }
 
+  //コンストラクタ（モード設定）
   public ActionKey(int mode) {
     this.mode = mode;
     reset();
   }
 
+  //　status 放した状態に設定
   public void reset() {
     state = STATE_RELEASED;
     amount = 0;
   }
 
+  //キー入力押された
   public void press() {
     if (state != STATE_WAITING_FOR_RELEASE) {
       amount++;
@@ -31,6 +35,7 @@ class ActionKey {
     }
   }
 
+  //キー入力放された
   public void release() {
     state = STATE_RELEASED;
   }

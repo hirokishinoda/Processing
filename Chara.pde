@@ -1,25 +1,28 @@
 public class Chara implements Common {
 
-  private static final int SPEED = 4;
+  protected static final int SPEED = 4;
   public static final double PROB_MOVE = 0.02;
 
-  private PImage img;
-  private PImage player;
-  private int x, y;   
-  private int px, py; 
+  protected PImage img;
+  protected PImage player;
+  protected int x, y;   
+  protected int px, py; 
 
-  private int direction;
-  private int count;
+  protected int direction;
+  protected int count;
 
-  private boolean isMoving;
-  private int movingLength;
-  private int charaNo;
-  private int moveType;
+  protected boolean isMoving;
+  protected int movingLength;
+  protected int charaNo;
+  protected int moveType;
+  protected int walkCount;
+  protected String message;
 
-  private Thread threadAnime;
+  protected Thread threadAnime;
 
-  private Map map;
+  protected Map map;
 
+  //コンストラクタ
   public Chara(int x, int y, int charaNo, int direction, int moveType, Map map) {
     this.x = x;
     this.y = y;
@@ -31,6 +34,7 @@ public class Chara implements Common {
     this.direction = direction;
     count = 0;
     this.moveType = moveType;
+    walkCount=0;
 
     this.map = map;
 
@@ -38,17 +42,27 @@ public class Chara implements Common {
       loadImages();
     }
 
-      threadAnime = new Thread(new AnimationThread());
-      threadAnime.start();
+    threadAnime = new Thread(new AnimationThread());
+    threadAnime.start();
   }
 
+  //equalsメソッドオーバーライド
+  public boolean equals(Object o) {
+    if (o==this) return true;
+    if (o==null) return false;    
+    if (o instanceof Chara) return false;
+
+    return true;
+  }
+
+  //キャラクター描画関数
   public void CharaDraw( int offsetX, int offsetY) {
     int cx = charaNo * CS * 3;
-
     player = img.get(cx + count * CS, direction * CS, CS, CS);
     image(player, px + offsetX, py + offsetY, CS, CS);
   }
 
+  //向きに応じた移動処理
   public boolean move() {
     switch (direction) {
     case LEFT:
@@ -79,7 +93,8 @@ public class Chara implements Common {
     return false;
   }
 
-  private boolean moveLeft() {
+  //左向き移動処理
+  protected boolean moveLeft() {
 
     int nextX = x - 1;
     int nextY = y;
@@ -106,7 +121,8 @@ public class Chara implements Common {
     return false;
   }
 
-  private boolean moveRight() {
+  //右向き移動処理
+  protected boolean moveRight() {
 
     int nextX = x + 1;
     int nextY = y;
@@ -138,8 +154,8 @@ public class Chara implements Common {
     return false;
   }
 
-
-  private boolean moveUp() {
+  //上向き移動処理
+  protected boolean moveUp() {
 
     int nextX = x;
     int nextY = y - 1;
@@ -170,7 +186,8 @@ public class Chara implements Common {
     return false;
   }
 
-  private boolean moveDown() {
+  //下向き移動処理
+  protected boolean moveDown() {
     int nextX = x;
     int nextY = y + 1;
     if (nextY > map.col - 2) nextY = map.col - 2;
@@ -202,6 +219,35 @@ public class Chara implements Common {
 
     return false;
   }
+
+  //画像読み込み関数
+  protected void loadImages() {
+    img = new PImage();
+    img = loadImage("./data/Image/Chara.png");
+    player = new PImage();
+  }
+
+  //アニメーション用カウントスレッド
+  protected class AnimationThread extends Thread {
+    public void run() {
+      while (true) {
+        if ( count == 2) {
+          count=0;
+        } else {
+          count++;
+        }
+
+        try {
+          Thread.sleep(300);
+        } 
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  /* getter と　setter の実装（processingだと意味ない？）*/
 
   public int getX() {
     return x;
@@ -236,6 +282,14 @@ public class Chara implements Common {
     movingLength = 0;
   }
 
+  public void setWalkCount(int walkcount) {
+    this.walkCount = walkcount;
+  }
+
+  public int getWalkCount() {
+    return this.walkCount;
+  }
+
   public int getCount() {
     return count;
   }
@@ -244,27 +298,10 @@ public class Chara implements Common {
     this.count = cou;
   }
 
-  private void loadImages() {
-    img = new PImage();
-    img = loadImage("/Users/拓樹/Documents/Processing/SRPG/Main/date/Chara.png");
-    player = new PImage();
+  public String getMessage() {
+    return message;
   }
-  private class AnimationThread extends Thread {
-    public void run() {
-      while (true) {
-        if ( count == 2) {
-          count=0;
-        } else {
-          count++;
-        }
-
-        try {
-          Thread.sleep(300);
-        } 
-        catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-    }
+  public void setMessage(String message) {
+    this.message=message;
   }
 }
